@@ -1,0 +1,27 @@
+# robots.txt for https://hamad-anwar.vercel.app/
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /assets/packages/
+
+# Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+# Sitemap URL
+Sitemap: https://hamad-anwar.vercel.app/sitemap.xml
