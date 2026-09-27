@@ -206,7 +206,7 @@
 
   <script>
     // Injected by flutter build
-    const serviceWorkerVersion = "4053336554";
+    const serviceWorkerVersion = "518842612";
   </script>
   <!-- Flutter bootstrap JS -->
   <script src="flutter.js" defer></script>
@@ -431,54 +431,6 @@
   <!-- Flutter Application Initialization Script                    -->
   <!-- ============================================================ -->
   <script>
-    // ============================================================
-    // Auto Refetch & Cache Busting: Ensures fresh builds load
-    // ============================================================
-    if ('serviceWorker' in navigator) {
-      var isRefreshing = false;
-      navigator.serviceWorker.addEventListener('controllerchange', function() {
-        if (!isRefreshing) {
-          isRefreshing = true;
-          window.location.reload();
-        }
-      });
-
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          for (var registration of registrations) {
-            registration.update();
-            if (registration.waiting) {
-              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-            }
-          }
-        });
-      });
-    }
-
-    // Version check against version.json with cache-bypass
-    try {
-      fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
-        .then(function(r) { return r.json(); })
-        .then(function(v) {
-          var key = (v && (v.build_number || v.version)) ? (v.version + '+' + v.build_number) : null;
-          if (key) {
-            var prev = localStorage.getItem('flutter_app_version');
-            if (prev && prev !== key) {
-              localStorage.setItem('flutter_app_version', key);
-              if ('caches' in window) {
-                caches.keys().then(function(keys) {
-                  return Promise.all(keys.map(function(k) { return caches.delete(k); }));
-                }).then(function() {
-                  window.location.reload();
-                });
-              }
-            } else {
-              localStorage.setItem('flutter_app_version', key);
-            }
-          }
-        }).catch(function() {});
-    } catch (_) {}
-
     window.addEventListener('load', function(ev) {
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
