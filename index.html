@@ -212,7 +212,7 @@
 
   <script>
     // Injected by flutter build
-    const serviceWorkerVersion = "3734370241";
+    const serviceWorkerVersion = "2931993641";
   </script>
   <!-- Flutter bootstrap JS -->
   <script src="flutter.js" defer></script>
@@ -228,17 +228,96 @@
       width: 100%;
       height: 100%;
       background-color: #000000;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       overflow-x: hidden;
     }
 
-    .center {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
+    #splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: default;
+      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .splash-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: -24px;
+    }
+
+    .splash-apple-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.12));
+    }
+
+    .splash-loading-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 36px;
+      width: 260px;
+    }
+
+    .splash-progress-track {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.7);
+      position: relative;
+    }
+
+    .splash-progress-bar {
+      height: 100%;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 999px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.75);
+      transform-origin: left center;
+      transform: scaleX(0);
+      will-change: transform;
+    }
+
+    .splash-status-label {
+      margin-top: 14px;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.78);
+      letter-spacing: 0.35px;
+      text-align: center;
+      min-height: 18px;
+      line-height: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1), transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .splash-progress-percent {
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.42);
+      letter-spacing: 0.6px;
+      font-variant-numeric: tabular-nums;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -310,25 +389,259 @@
   </style>
 
   <script id="splash-screen-script">
-    function removeSplashFromWeb() {
-      document.getElementById("splash")?.remove();
-      document.getElementById("splash-branding")?.remove();
-      document.body.style.background = "transparent";
-    }
+    (function () {
+      var currentProgress = 0;
+      var targetProgress = 0;
+      var isFinished = false;
+      var bar = null;
+      var percentText = null;
+      var statusText = null;
+      var currentStatus = "Starting desktop environment...";
+      var BASE_PRELOAD_PERCENT = 25;
+
+      function getElements() {
+        if (!bar) bar = document.getElementById("splash-progress-bar");
+        if (!percentText) percentText = document.getElementById("splash-progress-percent");
+        if (!statusText) statusText = document.getElementById("splash-status-label");
+      }
+
+      function updateStatus(newText) {
+        getElements();
+        if (!statusText || !newText || currentStatus === newText) return;
+        currentStatus = newText;
+        statusText.style.opacity = "0";
+        statusText.style.transform = "translateY(2px)";
+        setTimeout(function () {
+          if (statusText) {
+            statusText.textContent = newText;
+            statusText.style.opacity = "1";
+            statusText.style.transform = "translateY(0)";
+          }
+        }, 120);
+      }
+
+      function getStatusForPercent(percent) {
+        if (percent >= 100) return "Welcome to Hamad's Portfolio";
+        if (percent >= 85) return "Configuring glass shaders & desktop...";
+        if (percent >= 60) return "Pre-caching visual assets & wallpapers...";
+        if (percent >= 35) return "Loading desktop components...";
+        if (percent >= 20) return "Initializing graphic renderer...";
+        if (percent >= 10) return "Loading Flutter engine...";
+        return "Starting desktop environment...";
+      }
+
+      function updateUI(percent) {
+        getElements();
+        var clamped = Math.min(100, Math.max(0, percent));
+        if (bar) {
+          bar.style.transform = "scaleX(" + (clamped / 100).toFixed(4) + ")";
+        }
+        if (percentText) {
+          percentText.textContent = Math.round(clamped) + "%";
+        }
+      }
+
+      function tick() {
+        getElements();
+
+        if (!isFinished && currentProgress < targetProgress) {
+          var diff = targetProgress - currentProgress;
+          // Responsive dynamic step: catches up smoothly without artificial throttling
+          var step = Math.max(0.6, diff * 0.22);
+          currentProgress = Math.min(targetProgress, currentProgress + step);
+          updateUI(currentProgress);
+        }
+
+        if (!isFinished || currentProgress < 100) {
+          requestAnimationFrame(tick);
+        }
+      }
+      requestAnimationFrame(tick);
+
+      window.updateSplashProgress = function (val, status) {
+        if (typeof val === "number") {
+          targetProgress = Math.max(targetProgress, Math.min(100, val));
+        }
+        if (typeof status === "string" && status.trim().length > 0) {
+          updateStatus(status);
+        } else if (typeof val === "number" && !isFinished) {
+          updateStatus(getStatusForPercent(targetProgress));
+        }
+      };
+
+      var KNOWN_ASSET_SIZES = {
+        "assets/images/image.png": 101234,
+        "assets/mac-assets/wallpaper/mac-bg.jpg": 178088,
+        "assets/mac-assets/wallpaper/mac-bg2.jpg": 164743
+      };
+
+      // Real asset download tracking via XMLHttpRequest onprogress (25% -> 100%)
+      // Preload phase: 0% -> 25% (engine boot)
+      // Precache phase: 25% -> 100% (real network bytes & caching)
+      window.trackAssetDownloads = function (assetKeys, onComplete) {
+        // Ensure starting point is at least the base preload percentage
+        window.updateSplashProgress(BASE_PRELOAD_PERCENT, "Downloading desktop wallpapers & assets...");
+
+        function done() {
+          try {
+            window.dispatchEvent(new CustomEvent("assetDownloadsComplete"));
+          } catch (_) { }
+          if (typeof onComplete === "function") {
+            try { onComplete(); } catch (_) { }
+          }
+        }
+
+        if (!assetKeys || !assetKeys.length) {
+          window.updateSplashProgress(100, "Starting desktop environment...");
+          done();
+          return Promise.resolve();
+        }
+
+        return new Promise(function (resolve) {
+          var urls = [];
+          var keyMap = {};
+          for (var i = 0; i < assetKeys.length; i++) {
+            var key = assetKeys[i];
+            var path = key.indexOf("assets/") === 0 ? "assets/" + key : "assets/assets/" + key;
+            var fullUrl = new URL(path, document.baseURI).toString();
+            urls.push(fullUrl);
+            keyMap[fullUrl] = key;
+          }
+
+          var fileSizes = {};
+          var loadedSizes = {};
+          var completedCount = 0;
+          var totalFiles = urls.length;
+
+          for (var j = 0; j < urls.length; j++) {
+            var u = urls[j];
+            var k = keyMap[u];
+            fileSizes[u] = KNOWN_ASSET_SIZES[k] || 150000;
+            loadedSizes[u] = 0;
+          }
+
+          urls.forEach(function (url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.responseType = "blob";
+
+            xhr.onprogress = function (event) {
+              if (event.lengthComputable && event.total > 0) {
+                fileSizes[url] = event.total;
+              }
+              loadedSizes[url] = event.loaded;
+
+              var totalLoaded = 0;
+              var totalExpected = 0;
+              for (var k = 0; k < urls.length; k++) {
+                var itemUrl = urls[k];
+                totalLoaded += loadedSizes[itemUrl];
+                totalExpected += fileSizes[itemUrl];
+              }
+
+              if (totalExpected > 0) {
+                var ratio = Math.min(1.0, totalLoaded / totalExpected);
+                var precachePercent = BASE_PRELOAD_PERCENT + (ratio * (100 - BASE_PRELOAD_PERCENT));
+                var label = ratio > 0.75
+                  ? "Pre-caching graphics & shaders..."
+                  : "Downloading desktop wallpapers & assets...";
+                window.updateSplashProgress(precachePercent, label);
+              }
+            };
+
+            xhr.onload = function () {
+              completedCount++;
+              if (xhr.status >= 200 && xhr.status < 400) {
+                if (!fileSizes[url] || fileSizes[url] <= 0) {
+                  fileSizes[url] = loadedSizes[url] || 1;
+                }
+                loadedSizes[url] = fileSizes[url];
+              }
+
+              var totalLoaded = 0;
+              var totalExpected = 0;
+              for (var k = 0; k < urls.length; k++) {
+                var itemUrl = urls[k];
+                totalLoaded += loadedSizes[itemUrl];
+                totalExpected += fileSizes[itemUrl];
+              }
+
+              if (totalExpected > 0) {
+                var ratio = Math.min(1.0, totalLoaded / totalExpected);
+                var precachePercent = BASE_PRELOAD_PERCENT + (ratio * (100 - BASE_PRELOAD_PERCENT));
+                var label = completedCount >= totalFiles
+                  ? "Configuring desktop environment..."
+                  : "Pre-caching visual assets...";
+                window.updateSplashProgress(precachePercent, label);
+              }
+
+              if (completedCount >= totalFiles) {
+                window.updateSplashProgress(100, "Starting desktop environment...");
+                done();
+                resolve();
+              }
+            };
+
+            xhr.onerror = function () {
+              completedCount++;
+              if (completedCount >= totalFiles) {
+                window.updateSplashProgress(100, "Starting desktop environment...");
+                done();
+                resolve();
+              }
+            };
+
+            xhr.send();
+          });
+        });
+      };
+
+      window.removeSplashFromWeb = function () {
+        isFinished = true;
+        targetProgress = 100;
+        currentProgress = 100;
+        updateUI(100);
+        updateStatus("Welcome to Hamad's Portfolio");
+
+        var splash = document.getElementById("splash");
+        if (splash) {
+          splash.style.transition = "opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1)";
+          splash.style.opacity = "0";
+          setTimeout(function () {
+            splash.remove();
+            var branding = document.getElementById("splash-branding");
+            if (branding) branding.remove();
+            document.body.style.background = "transparent";
+          }, 250);
+        }
+      };
+    })();
   </script>
 </head>
 
 <body>
-  <!-- Native Splash Screen Image -->
-  <picture id="splash">
-    <source
-      srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x"
-      media="(prefers-color-scheme: light)">
-    <source
-      srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x"
-      media="(prefers-color-scheme: dark)">
-    <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="Hamad Anwar Portfolio Loading">
-  </picture>
+  <!-- Native macOS Boot Splash Screen with Progress & Percentage -->
+  <div id="splash" role="status" aria-label="Loading Hamad Anwar Portfolio">
+    <div class="splash-container">
+      <picture id="splash-branding">
+        <source
+          srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x"
+          media="(prefers-color-scheme: light)">
+        <source
+          srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x"
+          media="(prefers-color-scheme: dark)">
+        <img class="splash-apple-logo" aria-hidden="true" src="splash/img/light-1x.png"
+          alt="Hamad Anwar Portfolio Loading">
+      </picture>
+      <div class="splash-loading-section">
+        <div class="splash-progress-track">
+          <div id="splash-progress-bar" class="splash-progress-bar" style="transform: scaleX(0);"></div>
+        </div>
+        <div id="splash-status-label" class="splash-status-label">Starting desktop environment...</div>
+        <div id="splash-progress-percent" class="splash-progress-percent">0%</div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================================ -->
   <!-- Semantic Pre-Rendered HTML for Crawlers & Search Engines     -->
@@ -471,18 +784,40 @@
   <!-- Flutter Application Initialization Script                    -->
   <!-- ============================================================ -->
   <script>
-    window.addEventListener('load', function (ev) {
+    function initializeFlutter() {
+      if (window._flutterAppStarted) return;
+      if (!window._flutter || !window._flutter.loader) {
+        window.addEventListener('load', initializeFlutter);
+        return;
+      }
+      window._flutterAppStarted = true;
+      if (window.updateSplashProgress) {
+        window.updateSplashProgress(10, "Loading Flutter engine...");
+      }
+
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
         onEntrypointLoaded: function (engineInitializer) {
+          if (window.updateSplashProgress) {
+            window.updateSplashProgress(20, "Initializing graphic renderer...");
+          }
           engineInitializer.initializeEngine().then(function (appRunner) {
+            if (window.updateSplashProgress) {
+              window.updateSplashProgress(25, "Launching desktop application...");
+            }
             appRunner.runApp();
           });
         }
       });
-    });
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      initializeFlutter();
+    } else {
+      document.addEventListener('DOMContentLoaded', initializeFlutter);
+    }
   </script>
 </body>
 
