@@ -79,7 +79,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
   <link rel="manifest" href="manifest.json">
   <script>
-    window.__portfolioBuild = '20261008-2';
+    window.__portfolioBuild = '20261008-3';
     (function () {
       var KEY = 'portfolio-cache-generation';
       var BUILD = window.__portfolioBuild;
@@ -255,6 +255,9 @@
 
   <!-- Flutter bootstrap JS. Wasm builds expose _flutter.buildConfig here. -->
   <script src="flutter_bootstrap.js" defer></script>
+  <script>
+    const serviceWorkerVersion = "1103488387";
+  </script>
 
   <!-- ============================================================ -->
   <!-- Styling for Splash Screen & SEO Content                      -->
@@ -823,20 +826,14 @@
   <!-- Flutter Application Initialization Script                    -->
   <!-- ============================================================ -->
   <script>
-    var flutterBootWait = false;
     function initializeFlutter() {
       if (window.__portfolioResettingCache) return;
       if (window._flutterAppStarted) return;
       if (!window._flutter || !window._flutter.loader || !window._flutter.buildConfig) {
-        if (!flutterBootWait) {
-          flutterBootWait = true;
-          window.addEventListener('load', function () {
-            flutterBootWait = false;
-            initializeFlutter();
-          });
-        }
         if (document.readyState === 'complete') {
           setTimeout(initializeFlutter, 50);
+        } else {
+          window.addEventListener('load', initializeFlutter, { once: true });
         }
         return;
       }
@@ -845,9 +842,14 @@
         window.updateSplashProgress(10, "Loading Flutter engine...");
       }
 
+      // CanvasKit keeps normal word spacing. The Wasm renderer draws extra
+      // spaces and can leave the page blank.
       _flutter.loader.load({
         serviceWorkerSettings: {
-          serviceWorkerVersion: "4250755231",
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        config: {
+          renderer: "canvaskit",
         },
         onEntrypointLoaded: function (engineInitializer) {
           if (window.updateSplashProgress) {
@@ -863,7 +865,7 @@
       });
     }
 
-    window.addEventListener('load', initializeFlutter);
+    window.addEventListener('load', initializeFlutter, { once: true });
   </script>
 </body>
 
