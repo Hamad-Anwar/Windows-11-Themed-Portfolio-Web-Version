@@ -75,8 +75,51 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Hamad Anwar">
   <link rel="apple-touch-icon" href="icon.png">
-  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
   <link rel="manifest" href="manifest.json">
+  <script>
+    window.__portfolioBuild = '20261008-1';
+    (function () {
+      var KEY = 'portfolio-cache-generation';
+      var BUILD = window.__portfolioBuild;
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) { return; }
+      if (stored === BUILD) return;
+
+      window.__portfolioResettingCache = true;
+
+      function markReadyAndStart() {
+        try { localStorage.setItem(KEY, BUILD); } catch (e) {}
+        window.__portfolioResettingCache = false;
+        if (typeof window.initializeFlutter === 'function') window.initializeFlutter();
+      }
+
+      var cacheKeys = window.caches && caches.keys ? caches.keys() : Promise.resolve([]);
+      var registrations = (navigator.serviceWorker && navigator.serviceWorker.getRegistrations)
+        ? navigator.serviceWorker.getRegistrations()
+        : Promise.resolve([]);
+
+      Promise.all([cacheKeys, registrations]).then(function (result) {
+        var keys = result[0] || [];
+        var regs = result[1] || [];
+        if (!keys.length && !regs.length) {
+          markReadyAndStart();
+          return;
+        }
+        return Promise.all([
+          Promise.all(keys.map(function (key) { return caches.delete(key); })),
+          Promise.all(regs.map(function (reg) { return reg.unregister(); })),
+        ]).then(function () {
+          try { localStorage.setItem(KEY, BUILD); } catch (e) {}
+          location.reload();
+        });
+      }).catch(function () {
+        try { localStorage.setItem(KEY, BUILD); } catch (e) {}
+        location.reload();
+      });
+    })();
+  </script>
 
   <!-- ============================================================ -->
   <!-- Resource Hints & DNS Prefetch                                -->
@@ -212,7 +255,7 @@
 
   <script>
     // Injected by flutter build
-    const serviceWorkerVersion = "2931993641";
+    const serviceWorkerVersion = "733511767";
   </script>
   <!-- Flutter bootstrap JS -->
   <script src="flutter.js" defer></script>
@@ -470,7 +513,7 @@
       };
 
       var KNOWN_ASSET_SIZES = {
-        "assets/images/image.png": 101234,
+        "assets/images/img.jpeg": 101234,
         "assets/mac-assets/wallpaper/mac-bg.jpg": 178088,
         "assets/mac-assets/wallpaper/mac-bg2.jpg": 164743
       };
@@ -785,6 +828,7 @@
   <!-- ============================================================ -->
   <script>
     function initializeFlutter() {
+      if (window.__portfolioResettingCache) return;
       if (window._flutterAppStarted) return;
       if (!window._flutter || !window._flutter.loader) {
         window.addEventListener('load', initializeFlutter);
