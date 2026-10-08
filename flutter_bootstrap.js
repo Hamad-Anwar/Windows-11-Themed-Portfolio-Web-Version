@@ -36,8 +36,40 @@ if (!window._flutter) {
 }
 _flutter.buildConfig = {"engineRevision":"13e658725ddaa270601426d1485636157e38c34c","builds":[{"compileTarget":"dart2wasm","renderer":"skwasm","mainWasmPath":"main.dart.wasm","jsSupportRuntimePath":"main.dart.mjs"},{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
 
-_flutter.loader.load({
-  serviceWorkerSettings: {
-    serviceWorkerVersion: "1103488387"
+
+window.startPortfolio = function () {
+  if (window.__portfolioResettingCache) return;
+  if (window._flutterAppStarted) return;
+  if (!window._flutter || !window._flutter.loader || !window._flutter.buildConfig) return;
+  window._flutterAppStarted = true;
+  if (window.updateSplashProgress) {
+    window.updateSplashProgress(10, "Loading Flutter engine...");
   }
-});
+
+  // One engine only. CanvasKit keeps a single space between words.
+  // The Wasm renderer was also being started by the default bootstrap,
+  // so two desktops were drawn on top of each other.
+  _flutter.loader.load({
+    serviceWorkerSettings: {
+      serviceWorkerVersion: "3580520753"
+    },
+    config: {
+      renderer: "canvaskit"
+    },
+    onEntrypointLoaded: function (engineInitializer) {
+      if (window.updateSplashProgress) {
+        window.updateSplashProgress(20, "Initializing graphic renderer...");
+      }
+      engineInitializer.initializeEngine().then(function (appRunner) {
+        if (window.updateSplashProgress) {
+          window.updateSplashProgress(25, "Launching desktop application...");
+        }
+        appRunner.runApp();
+      });
+    }
+  });
+};
+
+if (!window.__portfolioResettingCache) {
+  window.startPortfolio();
+}
