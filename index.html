@@ -79,7 +79,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
   <link rel="manifest" href="manifest.json">
   <script>
-    window.__portfolioBuild = '20261008-1';
+    window.__portfolioBuild = '20261008-2';
     (function () {
       var KEY = 'portfolio-cache-generation';
       var BUILD = window.__portfolioBuild;
@@ -253,12 +253,8 @@
   <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"
     defer></script>
 
-  <script>
-    // Injected by flutter build
-    const serviceWorkerVersion = "733511767";
-  </script>
-  <!-- Flutter bootstrap JS -->
-  <script src="flutter.js" defer></script>
+  <!-- Flutter bootstrap JS. Wasm builds expose _flutter.buildConfig here. -->
+  <script src="flutter_bootstrap.js" defer></script>
 
   <!-- ============================================================ -->
   <!-- Styling for Splash Screen & SEO Content                      -->
@@ -827,11 +823,21 @@
   <!-- Flutter Application Initialization Script                    -->
   <!-- ============================================================ -->
   <script>
+    var flutterBootWait = false;
     function initializeFlutter() {
       if (window.__portfolioResettingCache) return;
       if (window._flutterAppStarted) return;
-      if (!window._flutter || !window._flutter.loader) {
-        window.addEventListener('load', initializeFlutter);
+      if (!window._flutter || !window._flutter.loader || !window._flutter.buildConfig) {
+        if (!flutterBootWait) {
+          flutterBootWait = true;
+          window.addEventListener('load', function () {
+            flutterBootWait = false;
+            initializeFlutter();
+          });
+        }
+        if (document.readyState === 'complete') {
+          setTimeout(initializeFlutter, 50);
+        }
         return;
       }
       window._flutterAppStarted = true;
@@ -839,9 +845,9 @@
         window.updateSplashProgress(10, "Loading Flutter engine...");
       }
 
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
+      _flutter.loader.load({
+        serviceWorkerSettings: {
+          serviceWorkerVersion: "4250755231",
         },
         onEntrypointLoaded: function (engineInitializer) {
           if (window.updateSplashProgress) {
@@ -857,11 +863,7 @@
       });
     }
 
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      initializeFlutter();
-    } else {
-      document.addEventListener('DOMContentLoaded', initializeFlutter);
-    }
+    window.addEventListener('load', initializeFlutter);
   </script>
 </body>
 
