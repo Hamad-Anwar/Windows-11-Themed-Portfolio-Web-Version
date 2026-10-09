@@ -51,7 +51,7 @@ window.startPortfolio = function () {
   // so two desktops were drawn on top of each other.
   _flutter.loader.load({
     serviceWorkerSettings: {
-      serviceWorkerVersion: "3580520753"
+      serviceWorkerVersion: "2359047504"
     },
     config: {
       renderer: "canvaskit"

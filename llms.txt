@@ -1,0 +1,22 @@
+# Mac Theme Portfolio
+
+> A Mac theme portfolio and a Windows 11 theme portfolio, both built in Flutter by Hamad Anwar.
+
+Hamad Anwar publishes an interactive desktop portfolio at https://hamad-anwar.vercel.app/.
+
+## What is this Mac theme portfolio?
+
+A Mac theme portfolio is a personal website that looks and works like a Mac desktop. This one opens in the browser with a menu bar, a dock, draggable windows, photos, projects, and a terminal. It is built in Flutter.
+
+## Windows 11 theme portfolio
+
+The same site includes a Windows 11 theme portfolio. You can switch from the Mac desktop to a Windows 11 desktop with a taskbar, Start menu, and draggable windows.
+
+## Who made it?
+
+Hamad Anwar (also known as Hammad Anwar), a Flutter developer in Lahore, Pakistan.
+
+- Site: https://hamad-anwar.vercel.app/
+- GitHub: https://github.com/Hamad-Anwar
+- LinkedIn: https://www.linkedin.com/in/hamad-anwar/
+- Email: rh676838@gmail.com

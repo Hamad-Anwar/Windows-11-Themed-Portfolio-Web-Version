@@ -1,11 +1,11 @@
 {
-  "name": "Hamad Anwar | Senior Flutter Developer Portfolio",
-  "short_name": "Hamad Anwar",
+  "name": "Mac Theme Portfolio by Hamad Anwar",
+  "short_name": "Mac Portfolio",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#0d1117",
-  "description": "Interactive Windows 11 and macOS desktop themed portfolio of Hamad Anwar, Senior Flutter Developer & Cross-Platform Mobile Engineer.",
+  "description": "A Mac theme portfolio and a Windows 11 theme portfolio, built in Flutter by Hamad Anwar.",
   "orientation": "any",
   "prefer_related_applications": false,
   "categories": [

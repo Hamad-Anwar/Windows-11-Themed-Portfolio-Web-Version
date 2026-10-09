@@ -4,7 +4,7 @@ Allow: /
 Disallow: /api/
 Disallow: /assets/packages/
 
-# Crawlers
+# Search crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -23,5 +23,26 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-# Sitemap URL
+# Answer engines. Allowed so this Mac theme portfolio can be cited.
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
 Sitemap: https://hamad-anwar.vercel.app/sitemap.xml

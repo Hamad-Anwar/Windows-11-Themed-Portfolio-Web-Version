@@ -3,24 +3,13 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://hamad-anwar.vercel.app/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://xtxqwfstysixmmcv.public.blob.vercel-storage.com/preview.jpeg</image:loc>
-      <image:title>Hamad Anwar - Senior Flutter Developer Portfolio</image:title>
-      <image:caption>Interactive Windows 11 and macOS Desktop Themed Portfolio by Hamad Anwar</image:caption>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://hamad-anwar.vercel.app/portfolio</loc>
-    <lastmod>2026-09-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://xtxqwfstysixmmcv.public.blob.vercel-storage.com/preview.jpeg</image:loc>
-      <image:title>Hamad Anwar - Projects and Applications</image:title>
-      <image:caption>Production iOS, Android, and Web Flutter Applications</image:caption>
+      <image:title>Mac theme portfolio and Windows 11 theme portfolio by Hamad Anwar</image:title>
+      <image:caption>A Flutter Mac theme portfolio with a dock, draggable windows, photos, and a terminal, plus a Windows 11 theme portfolio on the same site.</image:caption>
     </image:image>
   </url>
 </urlset>
