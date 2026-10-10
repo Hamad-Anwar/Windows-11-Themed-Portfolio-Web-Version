@@ -46,15 +46,11 @@ window.startPortfolio = function () {
     window.updateSplashProgress(10, "Loading Flutter engine...");
   }
 
-  // One engine only. CanvasKit keeps a single space between words.
-  // The Wasm renderer was also being started by the default bootstrap,
-  // so two desktops were drawn on top of each other.
+  // One engine only. The loader picks the Wasm build when the browser
+  // supports it, and CanvasKit otherwise.
   _flutter.loader.load({
     serviceWorkerSettings: {
-      serviceWorkerVersion: "2359047504"
-    },
-    config: {
-      renderer: "canvaskit"
+      serviceWorkerVersion: "674779775"
     },
     onEntrypointLoaded: function (engineInitializer) {
       if (window.updateSplashProgress) {

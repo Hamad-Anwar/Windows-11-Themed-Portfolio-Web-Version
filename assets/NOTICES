@@ -1761,6 +1761,7 @@ limitations under the License.
 cross_file
 flutter_plugin_android_lifecycle
 google_fonts
+path_provider
 path_provider_android
 path_provider_foundation
 shared_preferences
@@ -6364,7 +6365,6 @@ flutter_inappwebview_windows
 
 --------------------------------------------------------------------------------
 flutter_lints
-path_provider
 path_provider_linux
 path_provider_platform_interface
 path_provider_windows
