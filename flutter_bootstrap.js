@@ -34,7 +34,7 @@ addEventListener("message", eventListener);
 if (!window._flutter) {
   window._flutter = {};
 }
-_flutter.buildConfig = {"engineRevision":"13e658725ddaa270601426d1485636157e38c34c","builds":[{"compileTarget":"dart2wasm","renderer":"skwasm","mainWasmPath":"main.dart.wasm","jsSupportRuntimePath":"main.dart.mjs"},{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
+_flutter.buildConfig = {"engineRevision":"13e658725ddaa270601426d1485636157e38c34c","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
 
 
 window.startPortfolio = function () {
@@ -46,11 +46,13 @@ window.startPortfolio = function () {
     window.updateSplashProgress(10, "Loading Flutter engine...");
   }
 
-  // One engine only. The loader picks the Wasm build when the browser
-  // supports it, and CanvasKit otherwise.
+  // One engine only. Force CanvasKit renderer mode.
   _flutter.loader.load({
     serviceWorkerSettings: {
-      serviceWorkerVersion: "674779775"
+      serviceWorkerVersion: "2520080037"
+    },
+    config: {
+      renderer: "canvaskit"
     },
     onEntrypointLoaded: function (engineInitializer) {
       if (window.updateSplashProgress) {
