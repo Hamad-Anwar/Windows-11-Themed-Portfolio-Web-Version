@@ -81,7 +81,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
   <link rel="manifest" href="manifest.json">
   <script>
-    window.__portfolioBuild = '20261013-1';
+    window.__portfolioBuild = '20261014-1';
     (function () {
       var KEY = 'portfolio-cache-generation';
       var BUILD = window.__portfolioBuild;
@@ -92,7 +92,7 @@
       window.__portfolioResettingCache = true;
 
       function markReadyAndStart() {
-        try { localStorage.setItem(KEY, BUILD); } catch (e) {}
+        try { localStorage.setItem(KEY, BUILD); } catch (e) { }
         window.__portfolioResettingCache = false;
         if (typeof window.startPortfolio === 'function') window.startPortfolio();
       }
@@ -113,11 +113,11 @@
           Promise.all(keys.map(function (key) { return caches.delete(key); })),
           Promise.all(regs.map(function (reg) { return reg.unregister(); })),
         ]).then(function () {
-          try { localStorage.setItem(KEY, BUILD); } catch (e) {}
+          try { localStorage.setItem(KEY, BUILD); } catch (e) { }
           location.reload();
         });
       }).catch(function () {
-        try { localStorage.setItem(KEY, BUILD); } catch (e) {}
+        try { localStorage.setItem(KEY, BUILD); } catch (e) { }
         location.reload();
       });
     })();
@@ -504,7 +504,7 @@
     }
 
     /* The desktop paints above this article. The article stays in the document at full size and full opacity. */
-    body > flutter-view {
+    body>flutter-view {
       position: fixed;
       inset: 0;
       z-index: 2;
@@ -866,7 +866,8 @@
         <h3>What is a Mac theme portfolio?</h3>
         <p>
           A Mac theme portfolio is a personal website that looks and works like a Mac desktop.
-          This one, by Hamad Anwar, opens in the browser with a menu bar, a dock, draggable windows, photos, projects, and a terminal.
+          This one, by Hamad Anwar, opens in the browser with a menu bar, a dock, draggable windows, photos, projects,
+          and a terminal.
           It is built in Flutter.
         </p>
       </article>
@@ -879,7 +880,8 @@
       </article>
       <article>
         <h3>Who made this macOS themed portfolio?</h3>
-        <p>Hamad Anwar, a Flutter developer in Lahore, built this macOS themed portfolio and the Windows 11 theme portfolio.</p>
+        <p>Hamad Anwar, a Flutter developer in Lahore, built this macOS themed portfolio and the Windows 11 theme
+          portfolio.</p>
       </article>
       <article>
         <h3>What can you do inside the Mac theme portfolio?</h3>
@@ -898,15 +900,20 @@
         <li><strong>Phone / WhatsApp:</strong> <a href="https://wa.me/+923054200605">+92 305 4200605</a></li>
         <li><strong>Site:</strong> <a href="https://hamad-anwar.vercel.app/">https://hamad-anwar.vercel.app/</a></li>
         <li><strong>GitHub:</strong> <a href="https://github.com/Hamad-Anwar">https://github.com/Hamad-Anwar</a></li>
-        <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/hamad-anwar/">https://www.linkedin.com/in/hamad-anwar/</a></li>
-        <li><strong>Buy Me a Coffee:</strong> <a href="https://www.buymeacoffee.com/hamadanwar">https://www.buymeacoffee.com/hamadanwar</a></li>
+        <li><strong>LinkedIn:</strong> <a
+            href="https://www.linkedin.com/in/hamad-anwar/">https://www.linkedin.com/in/hamad-anwar/</a></li>
+        <li><strong>Buy Me a Coffee:</strong> <a
+            href="https://www.buymeacoffee.com/hamadanwar">https://www.buymeacoffee.com/hamadanwar</a></li>
       </ul>
     </section>
   </main>
 
   <noscript>
     <style>
-      #splash { display: none !important; }
+      #splash {
+        display: none !important;
+      }
+
       #seo-crawler-content {
         position: static !important;
         pointer-events: auto !important;
@@ -917,7 +924,8 @@
     <div style="background-color: #0b0f19; color: #f8fafc; padding: 20px; font-family: sans-serif; text-align: center;">
       <p><strong>JavaScript is off.</strong> The Mac theme portfolio desktop needs JavaScript.
         The written version of the page is above. Email
-        <a href="mailto:rh676838@gmail.com" style="color: #38bdf8;">rh676838@gmail.com</a>.</p>
+        <a href="mailto:rh676838@gmail.com" style="color: #38bdf8;">rh676838@gmail.com</a>.
+      </p>
     </div>
   </noscript>
 
