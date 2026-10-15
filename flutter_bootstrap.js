@@ -49,7 +49,7 @@ window.startPortfolio = function () {
   // One engine only. Force CanvasKit renderer mode.
   _flutter.loader.load({
     serviceWorkerSettings: {
-      serviceWorkerVersion: "3985145473"
+      serviceWorkerVersion: "1746440323"
     },
     config: {
       renderer: "canvaskit"
